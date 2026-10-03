@@ -7,17 +7,22 @@ from project_orders.modules.project_requests.application.dtos.project_request_ou
 from project_orders.modules.project_requests.domain.entities.project_request import (
     ProjectRequest,
 )
+from project_orders.modules.project_requests.domain.repositories.project_request_repository import (
+    ProjectRequestRepository,
+)
 
 
 class CreateProjectRequestUseCase:
-    """Caso de uso: cria uma nova solicitação de projeto.
+    """Caso de uso: cria e persiste uma nova solicitação de projeto.
 
-    Nesta fase (Fase 1) ainda não há persistência: a solicitação é
-    criada e devolvida em memória. A integração com repositório será
-    adicionada na Fase 2, sem alterar esta assinatura publicamente.
+    Depende apenas do Protocol ProjectRequestRepository — não conhece
+    SQLAlchemy nem PostgreSQL diretamente (Dependency Inversion).
     """
 
-    def execute(self, data: ProjectRequestInput) -> ProjectRequestOutput:
+    def __init__(self, repository: ProjectRequestRepository) -> None:
+        self._repository = repository
+
+    async def execute(self, data: ProjectRequestInput) -> ProjectRequestOutput:
         project_request = ProjectRequest.create(
             client_name=data.client_name,
             client_email=data.client_email,
@@ -27,5 +32,7 @@ class CreateProjectRequestUseCase:
             deadline=data.deadline,
             budget=data.budget,
         )
+
+        project_request = await self._repository.save(project_request)
 
         return ProjectRequestOutput.from_domain(project_request)

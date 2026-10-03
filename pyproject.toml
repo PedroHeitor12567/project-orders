@@ -9,6 +9,9 @@ dependencies = [
     "uvicorn[standard]>=0.30.0",
     "pydantic[email]>=2.9.0",
     "pydantic-settings>=2.5.0",
+    "sqlalchemy[asyncio]>=2.0.35",
+    "asyncpg>=0.29.0",
+    "alembic>=1.13.0",
 ]
 
 [dependency-groups]
@@ -51,6 +54,11 @@ lint = "ruff check ."
 format = "ruff format ."
 format-check = "ruff format --check ."
 check = "ruff check . && ruff format --check . && pytest"
+db-up = "docker compose up -d db"
+db-down = "docker compose down"
+migration-create = "alembic revision --autogenerate -m"
+migration-upgrade = "alembic upgrade head"
+migration-downgrade = "alembic downgrade -1"
 
 [build-system]
 requires = ["hatchling"]
