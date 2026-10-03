@@ -1,21 +1,22 @@
+# Ambientes
+.env
+.venv/
+venv/
+
 # Python
 __pycache__/
 *.py[cod]
-*.pyo
-
-# Virtual environment
-.venv/
-
-# Environment variables
-.env
-
-# Testing
+*.egg-info/
 .pytest_cache/
-.coverage
-htmlcov/
-
-# Ruff
 .ruff_cache/
+.mypy_cache/
+
+# uv
+uv.lock
+
+# Build
+dist/
+build/
 
 # IDE
 .vscode/
@@ -23,4 +24,3 @@ htmlcov/
 
 # OS
 .DS_Store
-Thumbs.db
